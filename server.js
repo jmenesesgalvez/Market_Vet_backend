@@ -47,9 +47,12 @@ app.use(cors({
             callback(new Error('No permitido por la política de CORS'));
         }
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Métodos permitidos
     credentials: true, // Permitir cookies y autenticación
 }));
+
+// Manejo explícito de solicitudes preflight
+app.options('*', cors()); // Manejar OPTIONS para todos los endpoints
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -87,6 +90,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Servidor ejecutándose en el puerto ${PORT}`);
 });
+
 
 
 
