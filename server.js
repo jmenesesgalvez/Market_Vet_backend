@@ -36,10 +36,19 @@ app.use(helmet());
 
 // Configuración de CORS
 const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+
 app.use(cors({
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
+    origin: (origin, callback) => {
+        // Permitir solicitudes de orígenes definidos o sin origen (Postman o servidores locales)
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.error(`Origen no permitido por CORS: ${origin}`);
+            callback(new Error('No permitido por la política de CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true, // Permitir cookies y autenticación
 }));
 
 // Middleware para parsear JSON
