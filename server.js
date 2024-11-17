@@ -35,7 +35,10 @@ const app = express();
 app.use(helmet());
 
 // Configuración de CORS
-const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+const allowedOrigins = [
+    'http://localhost:5173', // Para desarrollo local
+    'https://market-vet.netlify.app', // Para producción en Netlify
+];
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -51,8 +54,8 @@ app.use(cors({
     credentials: true, // Permitir cookies y autenticación
 }));
 
-// Manejo explícito de solicitudes preflight
-app.options('*', cors()); // Manejar OPTIONS para todos los endpoints
+// Manejo explícito de solicitudes preflight (OPTIONS)
+app.options('*', cors());
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -90,6 +93,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Servidor ejecutándose en el puerto ${PORT}`);
 });
+
 
 
 
